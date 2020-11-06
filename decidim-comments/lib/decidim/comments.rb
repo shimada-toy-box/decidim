@@ -9,6 +9,8 @@ module Decidim
   # It exposes a single entry point as a rails helper method to render
   # a React component which handle all the comments render and logic.
   module Comments
+    ROOT_PATH = Pathname.new(File.join(__dir__, "..", ".."))
+
     autoload :CommentsHelper, "decidim/comments/comments_helper"
     autoload :AddCommentType, "decidim/comments/api/add_comment_type"
     autoload :CommentMutationType, "decidim/comments/api/comment_mutation_type"
@@ -25,6 +27,13 @@ module Decidim
 
     def self.newsletter_participant_entities
       ["Decidim::Comments::Comment"]
+    end
+
+    def self.webpacker
+      @webpacker ||= ::Webpacker::Instance.new(
+        root_path: ROOT_PATH,
+        config_path: ROOT_PATH.join("config/webpacker.yml")
+      )
     end
   end
 end

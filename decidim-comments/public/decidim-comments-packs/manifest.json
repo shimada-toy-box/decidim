@@ -1,0 +1,14 @@
+{
+  "decidim/comments/application.js": "/decidim-comments-packs/js/decidim/comments/application-59565924078ae8fd89f5.js",
+  "decidim/comments/application.js.map": "/decidim-comments-packs/js/decidim/comments/application-59565924078ae8fd89f5.js.map",
+  "entrypoints": {
+    "decidim/comments/application": {
+      "js": [
+        "/decidim-comments-packs/js/decidim/comments/application-59565924078ae8fd89f5.js"
+      ],
+      "js.map": [
+        "/decidim-comments-packs/js/decidim/comments/application-59565924078ae8fd89f5.js.map"
+      ]
+    }
+  }
+}

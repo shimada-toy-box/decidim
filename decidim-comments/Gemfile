@@ -1,0 +1,6 @@
+source "https://rubygems.org"
+
+gem "decidim-admin", path: ".."
+gem "decidim-dev", path: ".."
+
+gemspec

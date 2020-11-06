@@ -1,10 +1,12 @@
 # frozen_string_literal: true
+require "webpacker/helper"
 
 module Decidim
   module Comments
     # A cell to display a comments section for a commentable object.
     class CommentsCell < Decidim::ViewModel
       include Decidim::IconHelper
+      include ::Webpacker::Helper
 
       delegate :user_signed_in?, to: :controller
 
@@ -34,6 +36,10 @@ module Decidim
         return unless user_comments_blocked?
 
         render :user_comments_blocked_warning
+      end
+
+      def current_webpacker_instance
+        Decidim::Comments.webpacker
       end
 
       private
