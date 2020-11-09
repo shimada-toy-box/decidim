@@ -105,6 +105,7 @@ $(() => {
     $(el).data("comments", comments);
   });
 });
+console.log('Hello World from Webpacker');
 
 /***/ }),
 
@@ -414,4 +415,4 @@ class CommentsComponent {
 /***/ })
 
 /******/ });
-//# sourceMappingURL=application-59565924078ae8fd89f5.js.map
+//# sourceMappingURL=application-25242cd8c3f29fd172b7.js.map
