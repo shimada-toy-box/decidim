@@ -56,7 +56,7 @@ namespace :decidim do
 
     def install_decidim_npm
       decidim_npm_packages.each do |type, packages|
-        system! "npm i --save-#{type} #{packages.join(" ")}"
+        system! "npm install --legacy-peer-deps --save-#{type} #{packages.join(" ")}"
       end
     end
 
