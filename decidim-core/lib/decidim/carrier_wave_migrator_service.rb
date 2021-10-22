@@ -94,7 +94,11 @@ module Decidim
           end
         rescue StandardError
           logger.info "[ERROR] Exception checking Decidim::ContentBlock##{block.id} attachment #{image_config[:name]}" \
-            " from CW attribute #{image_config[:name]} to AS file attribute in a Decidim::ContentBlockAttachment instance #{$ERROR_INFO}"
+            " from CW attribute #{image_config[:name]} to AS file attribute in a Decidim::ContentBlockAttachment instance #{$ERROR_INFO}." \
+            "\n=======================\n" \
+            "Trace:\n\n" \
+            "#{$ERROR_POSITION.join("\n")}" \
+            "\n=======================\n"
         end
       end
     end
@@ -142,7 +146,11 @@ module Decidim
                                destination_path: Rails.application.routes.url_helpers.rails_blob_url(destination.blob, only_path: true) }
         rescue StandardError
           logger.info "[ERROR] Exception migrating Decidim::ContentBlock##{block.id} attachment #{image_config[:name]}" \
-            " from CW attribute #{image_config[:name]} to AS file attribute in a Decidim::ContentBlockAttachment instance #{$ERROR_INFO}"
+            " from CW attribute #{image_config[:name]} to AS file attribute in a Decidim::ContentBlockAttachment instance #{$ERROR_INFO}." \
+            "\n=======================\n" \
+            "Trace:\n\n" \
+            "#{$ERROR_POSITION.join("\n")}" \
+            "\n=======================\n"
         end
       end
     end
@@ -186,7 +194,11 @@ module Decidim
           destination_path: Rails.application.routes.url_helpers.rails_blob_url(copy.send(as_attribute).blob, only_path: true)
         }
       rescue StandardError
-        logger.info "[ERROR] Exception migrating #{klass}##{item.id} from CW attribute #{cw_attribute} to AS #{as_attribute} attribute #{$ERROR_INFO}"
+        logger.info "[ERROR] Exception migrating #{klass}##{item.id} from CW attribute #{cw_attribute} to AS #{as_attribute} attribute #{$ERROR_INFO}." \
+          "\n=======================\n" \
+          "Trace:\n\n" \
+          "#{$ERROR_POSITION.join("\n")}" \
+          "\n=======================\n"
       end
     end
     # rubocop:enable Metrics/ParameterLists
@@ -214,7 +226,11 @@ module Decidim
           logger.info "[SKIP] Pending migration of #{klass}##{item.id} from CW attribute #{cw_attribute} to AS #{as_attribute} attribute"
         end
       rescue StandardError
-        logger.info "[ERROR] Exception checking #{klass}##{item.id} from CW attribute #{cw_attribute} to AS #{as_attribute} attribute #{$ERROR_INFO}"
+        logger.info "[ERROR] Exception checking #{klass}##{item.id} from CW attribute #{cw_attribute} to AS #{as_attribute} attribute #{$ERROR_INFO}." \
+          "\n=======================\n" \
+          "Trace:\n\n" \
+          "#{$ERROR_POSITION.join("\n")}" \
+          "\n=======================\n"
       end
     end
 
