@@ -3,9 +3,10 @@
 namespace :decidim do
   namespace :active_storage_migrations do
     desc "Migrates attachments from Carrierwave to ActiveStorage"
-    task migrate_from_carrierwave_to_active_storage: :environment do
+    task :migrate_from_carrierwave_to_active_storage, [:log_path] => [:environment] do |_t, args|
       # Setup a new logger, using the timestamp to identify each migration
-      logger = ActiveSupport::TaggedLogging.new(Logger.new("log/#{Time.current.strftime("%Y%m%d%H%M")}_activestorage_migration.log"))
+      log_path = args[:log_path].presence || "log/"
+      logger = ActiveSupport::TaggedLogging.new(Logger.new(File.join(log_path,"#{Time.current.strftime("%Y%m%d%H%M")}_activestorage_migration.log")))
       routes_mappings = []
 
       Decidim::CarrierWaveMigratorService::MIGRATION_ATTRIBUTES.each do |(klass, cw_attribute, cw_uploader, as_attribute)|
@@ -27,9 +28,10 @@ namespace :decidim do
     end
 
     desc "Checks attachments migrated from Carrierwave to ActiveStorage"
-    task check_migration_from_carrierwave_to_active_storage: :environment do
+    task :check_migration_from_carrierwave_to_active_storage, [:log_path] => [:environment] do |_t, args|
       # Setup a new logger, using the timestamp to identify each migration
-      logger = ActiveSupport::TaggedLogging.new(Logger.new("log/#{Time.current.strftime("%Y%m%d%H%M")}_activestorage_migration_check.log"))
+      log_path = args[:log_path].presence || "log/"
+      logger = ActiveSupport::TaggedLogging.new(Logger.new(File.join(log_path, "#{Time.current.strftime("%Y%m%d%H%M")}_activestorage_migration_check.log")))
       Decidim::CarrierWaveMigratorService::MIGRATION_ATTRIBUTES.each do |(klass, cw_attribute, cw_uploader, as_attribute)|
         Decidim::CarrierWaveMigratorService.check_migration({
                                                               klass: klass, cw_attribute: cw_attribute,
