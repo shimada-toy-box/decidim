@@ -83,11 +83,14 @@ jobs:
       - run: RAILS_ENV=test bundle exec rails assets:precompile
         name: Precompile assets
         working-directory: ./spec/decidim_dummy_app/
+      - run: bundle exec rake parallel:create[2] parallel:migrate[2]
+        name: Parallel tests
+        working-directory: ./spec/decidim_dummy_app/
       - run: |
           count=$(ls spec/system/*_spec.rb | wc -l | tr -d ' ')
           half=$(expr $count / 2)
           list_of_files=$(ls spec/system/*_spec.rb | sed -n "1,$(echo $half)p" | xargs)
-          bundle exec rspec $list_of_files
+          bundle exec rake parallel:spec $list_of_files
         name: RSpec
         working-directory: ${{ env.DECIDIM_MODULE }}
       - run: ./.github/upload_coverage.sh decidim-proposals-system-public $GITHUB_EVENT_PATH
