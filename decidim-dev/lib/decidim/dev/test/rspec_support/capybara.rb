@@ -7,7 +7,7 @@ module Decidim
   # Helpers meant to be used only during capybara test runs.
   module CapybaraTestHelpers
     def switch_to_host(host = "lvh.me")
-      raise "Can't switch to a custom host unless it really exists. Use `whatever.lvh.me` as a workaround." unless /lvh\.me$/.match?(host)
+      # raise "Can't switch to a custom host unless it really exists. Use `whatever.lvh.me` as a workaround." unless /lvh\.me$/.match?(host)
 
       app_host = (host ? "http://#{host}" : nil)
       Capybara.app_host = app_host
@@ -25,7 +25,6 @@ end
 
 Capybara.register_driver :headless_chrome do |app|
   options = ::Selenium::WebDriver::Chrome::Options.new
-  options.args << "--headless"
   options.args << "--no-sandbox"
   options.args << if ENV["BIG_SCREEN_SIZE"].present?
                     "--window-size=1920,3000"
@@ -53,9 +52,32 @@ Capybara.register_driver :iphone do |app|
   )
 end
 
-Capybara.server = :puma, { Silent: true, Threads: "1:1" }
+Capybara.register_driver :headless_chrome_pwa do |app|
+  # proxy_server = '47.184.133.79:9999'
+  options = ::Selenium::WebDriver::Chrome::Options.new
+  options.args << "--no-sandbox"
+  # options.args << "--headless"
+  # options.args << "--ignoreHTTPSErrors"
+  # options.args << "ignoreHTTPSErrors"
+  options.args << "start-maximized"
+  options.args << "--enable-features=NetworkService, NetworkServiceInProcess"
+  # options.args << "--proxy-server=#{proxy_server}"
 
-Capybara.asset_host = "http://localhost:3000"
+  #chrome_opts = { chromeOptions: { args: ["--headless", "--enable-features=NetworkService,NetworkServiceInProcess"] } }
+  # chrome_opts = { args: ["--enable-features=NetworkService,NetworkServiceInProcess"] }
+
+  Capybara::Selenium::Driver.new(
+    app,
+    browser: :chrome,
+    # desired_capabilities: Selenium::WebDriver::Remote::Capabilities.chrome(chrome_opts),
+    # options: options
+    capabilities: [options]
+  )
+end
+
+Capybara.javascript_driver = :headless_chrome_pwa
+
+Capybara.server = :puma, { Silent: true, Threads: "1:1" }
 
 Capybara.server_errors = [SyntaxError, StandardError]
 
@@ -63,7 +85,7 @@ Capybara.default_max_wait_time = 10
 
 RSpec.configure do |config|
   config.before :each, type: :system do
-    driven_by(:headless_chrome)
+    driven_by(:headless_chrome_pwa)
     switch_to_default_host
   end
 
