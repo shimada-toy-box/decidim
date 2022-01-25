@@ -1,4 +1,4 @@
-name: "[CI] Admin"
+name: "[CI] Admin (unit tests)"
 on:
   push:
     branches:
@@ -83,7 +83,7 @@ jobs:
       - run: bundle exec rake parallel:create[2] parallel:migrate[2]
         name: Parallel tests
         working-directory: ./spec/decidim_dummy_app/
-      - run: bundle exec rake parallel:spec
+      - run: bundle exec parallel_rspec -n 2 --test-options '--exclude-pattern "spec/system/**/*_spec.rb"'
         name: RSpec
         working-directory: ${{ env.DECIDIM_MODULE }}
         env:
