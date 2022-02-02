@@ -25,32 +25,26 @@ self.__WB_DISABLE_DEV_LOGS = true
 const dummy = self.__WB_MANIFEST;
 
 self.addEventListener("push", (event) => {
-  let title = event.data.json().title;
-  let body = event.data.json().body;
-  let icon = event.data.json().icon;
-  let url = event.data.json().url;
-  let tag = "new-notification-tag";
+  const { title, body, ...opts } = event.data.json();
 
-  event.waitUntil(
-    self.registration.showNotification(title, {body: body, icon: icon, tag: tag, data: { url: url }})
-  )
+  event.waitUntil(self.registration.showNotification(title, { body, ...opts }));
 });
 
-self.addEventListener("notificationclick", function(event) {
+// https://developer.mozilla.org/en-US/docs/Web/API/Clients/openWindow
+// Notification click event listener
+self.addEventListener("notificationclick", (event) => {
+  // Close the notification popout
   event.notification.close();
-
-  // This looks to see if the current is already open and
-  // focuses if it is
-  event.waitUntil(clients.matchAll({
-    type: "window"
-  }).then(function(clientList) {
-    for (let i = 0; i < clientList.length; i++) {
-      let client = clientList[i];
-      if (client.url === "/" && "focus" in client)
-      {return client.focus();}
-    }
-    if (clients.openWindow)
-    {return clients.openWindow(event.notification.data.url);}
+  // Get all the Window clients
+  event.waitUntil(self.clients.matchAll({ type: "window" }).then((clientsArr) => {
+    // If a Window tab matching the targeted URL already exists, focus that;
+    const hadWindowToFocus = clientsArr.some((windowClient) => (windowClient.url === e.notification.data.url
+      ? (windowClient.focus(), true)
+      : false));
+    // Otherwise, open a new tab to the applicable URL and focus it.
+    if (!hadWindowToFocus) {clients.openWindow(e.notification.data.url).then((windowClient) => (windowClient
+      ? windowClient.focus()
+      : null));}
   }));
 });
 
