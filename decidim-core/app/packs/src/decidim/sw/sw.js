@@ -36,16 +36,22 @@ self.addEventListener("notificationclick", (event) => {
   // Close the notification popout
   event.notification.close();
   // Get all the Window clients
-  event.waitUntil(self.clients.matchAll({ type: "window" }).then((clientsArr) => {
-    // If a Window tab matching the targeted URL already exists, focus that;
-    const hadWindowToFocus = clientsArr.some((windowClient) => (windowClient.url === e.notification.data.url
-      ? (windowClient.focus(), true)
-      : false));
-    // Otherwise, open a new tab to the applicable URL and focus it.
-    if (!hadWindowToFocus) {clients.openWindow(e.notification.data.url).then((windowClient) => (windowClient
-      ? windowClient.focus()
-      : null));}
-  }));
+  event.waitUntil(
+    self.clients.matchAll({ type: "window" }).then((clientsArr) => {
+      // If a Window tab matching the targeted URL already exists, focus that;
+      const hadWindowToFocus = clientsArr.some((windowClient) =>
+        (windowClient.url === e.notification.data.url
+          ? (windowClient.focus(), true)
+          : false)
+      );
+      // Otherwise, open a new tab to the applicable URL and focus it.
+      if (!hadWindowToFocus) {
+        self.clients.
+          openWindow(event.notification.data.url).
+          then((windowClient) => windowClient && windowClient.focus());
+      }
+    })
+  );
 });
 
 // avoid caching admin or users paths
