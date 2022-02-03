@@ -25,9 +25,8 @@ self.__WB_DISABLE_DEV_LOGS = true
 const dummy = self.__WB_MANIFEST;
 
 self.addEventListener("push", (event) => {
-  const { title, body, ...opts } = event.data.json();
-
-  event.waitUntil(self.registration.showNotification(title, { body, ...opts }));
+  const { title, ...opts } = event.data.json();
+  event.waitUntil(self.registration.showNotification(title, { ...opts }));
 });
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Clients/openWindow
