@@ -24,7 +24,6 @@ module Decidim
         email_on_moderations: data[:email_on_moderations],
         newsletter_notifications_at: data[:newsletter_notifications_at],
         direct_message_types: data[:direct_message_types],
-        allow_push_notifications: data[:allow_push_notifications],
         notifications_sending_frequency: data[:notifications_sending_frequency],
         valid?: valid
       )
@@ -48,7 +47,6 @@ module Decidim
         expect(user.newsletter_notifications_at).not_to be_nil
         expect(user.notification_types).to eq "none"
         expect(user.direct_message_types).to eq "followed-only"
-        expect(user.allow_push_notifications).to be_truthy
         expect(user.notifications_sending_frequency).to eq "weekly"
       end
     end

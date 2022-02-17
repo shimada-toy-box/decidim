@@ -29,7 +29,6 @@ module Decidim
       @user.notification_types = @form.notification_types
       @user.direct_message_types = @form.direct_message_types
       @user.email_on_moderations = @form.email_on_moderations
-      @user.allow_push_notifications = @form.allow_push_notifications
       @user.notifications_sending_frequency = @form.notifications_sending_frequency
     end
   end
